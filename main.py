@@ -1,5 +1,12 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    CallbackQueryHandler,
+    MessageHandler,
+    ContextTypes,
+    filters,
+)
 from dotenv import load_dotenv
 import os
 import asyncio
@@ -37,12 +44,17 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "settings":
         await query.edit_message_text("⚙️ Settings")
+async def receive_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = update.message.text
 
+    await update.message.reply_text(
+        f"📄 আপনার পোস্ট:\n\n{text}\n\n✅ Preview System শীঘ্রই যোগ করা হবে।"
+    )
 app = Application.builder().token(TOKEN).build()
 
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CallbackQueryHandler(button_click))
-
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, receive_post))
 if __name__ == "__main__":
     asyncio.set_event_loop(asyncio.new_event_loop())
     print("BFS POST MANAGER RUNNING...")
