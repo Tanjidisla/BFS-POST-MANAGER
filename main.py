@@ -27,7 +27,7 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     if query.data == "publish":
-        await query.edit_message_text("📢 Publish System")
+        await query.message.reply_text("📝 আপনার পোস্ট লিখুন:")
 
     elif query.data == "templates":
         await query.edit_message_text("📝 Template Manager")
