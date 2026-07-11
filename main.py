@@ -51,9 +51,19 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def receive_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
-    await update.message.reply_text(
-        f"📄 আপনার পোস্ট:\n\n{text}\n\n✅ Preview System শীঘ্রই যোগ করা হবে।"
-    )
+    keyboard = [
+    [
+        InlineKeyboardButton("✅ Confirm Publish", callback_data="confirm_publish"),
+        InlineKeyboardButton("❌ Cancel", callback_data="cancel_publish"),
+    ]
+]
+
+reply_markup = InlineKeyboardMarkup(keyboard)
+
+await update.message.reply_text(
+    f"📄 আপনার পোস্ট:\n\n{text}",
+    reply_markup=reply_markup
+)
 app = Application.builder().token(TOKEN).build()
 
 app.add_handler(CommandHandler("start", start))
