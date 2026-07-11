@@ -44,6 +44,10 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "settings":
         await query.edit_message_text("⚙️ Settings")
+    elif query.data == "confirm_publish":
+        await query.edit_message_text("✅ পোস্ট Publish করা হয়েছে!")
+    elif query.data == "cancel_publish":
+        await query.edit_message_text("❌ Publish বাতিল করা হয়েছে।")    
 async def receive_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
