@@ -1,0 +1,49 @@
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from dotenv import load_dotenv
+import os
+import asyncio
+load_dotenv()
+
+TOKEN = os.getenv("BOT_TOKEN")
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = [
+        [InlineKeyboardButton("📢 Publish Post", callback_data="publish")],
+        [InlineKeyboardButton("📝 Templates", callback_data="templates")],
+        [InlineKeyboardButton("🔘 Buttons", callback_data="buttons")],
+        [InlineKeyboardButton("⚙️ Settings", callback_data="settings")]
+    ]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await update.message.reply_text(
+        "🤖 BFS POST MANAGER\n\nএকটি অপশন নির্বাচন করুন:",
+        reply_markup=reply_markup
+    )
+
+async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == "publish":
+        await query.edit_message_text("📢 Publish System")
+
+    elif query.data == "templates":
+        await query.edit_message_text("📝 Template Manager")
+
+    elif query.data == "buttons":
+        await query.edit_message_text("🔘 Button Manager")
+
+    elif query.data == "settings":
+        await query.edit_message_text("⚙️ Settings")
+
+app = Application.builder().token(TOKEN).build()
+
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CallbackQueryHandler(button_click))
+
+if __name__ == "__main__":
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    print("BFS POST MANAGER RUNNING...")
+    app.run_polling()
